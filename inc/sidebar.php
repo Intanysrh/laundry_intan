@@ -17,9 +17,15 @@
                     <span class="hide-menu">Home</span>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="template/index.html" aria-expanded="false">
+                    <a class="sidebar-link" href="?page=user" aria-expanded="false">
                         <i class="ti ti-atom"></i>
-                        <span class="hide-menu">Dashboard</span>
+                        <span class="hide-menu">User</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="?page=customer" aria-expanded="false">
+                        <i class="ti ti-atom"></i>
+                        <span class="hide-menu">Customer</span>
                     </a>
                 </li>
                 <!-- ---------------------------------- -->
