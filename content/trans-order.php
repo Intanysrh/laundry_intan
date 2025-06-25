@@ -1,15 +1,15 @@
 <?php
 session_start();
-include 'koneksi.php';
+include 'config/koneksi.php';
 // munculkan atau pilih  sebuah atau semua kolom dari table user
-$queryTrans = mysqli_query($koneksi,  "SELECT customer.customer_name, trans_order.* FROM trans_order LEFT JOIN customer ON customer.id=trans_order.id_customer ORDER BY id DESC");
+$queryTrans = mysqli_query($config,  "SELECT customer.customer_name, trans_order.* FROM trans_order LEFT JOIN customer ON customer.id=trans_order.id_customer ORDER BY id DESC");
 // pake mysqli_fetch_assoc($query) = untuk menjadikan hasil query menjadi sebuah data (object, array)
 // $dataUser = mysqli_fetch_assoc($queryUser);
 // jika parameternya ada ?delete=nilai parameter
 if (isset($_GET['delete'])) {
     $id =  $_GET['delete']; // untuk mengambil nilai parameter
     //masukin $query untuk melakukan perintah yg diinginkan
-    $delete  = mysqli_query($koneksi, "DELETE FROM trans_order WHERE id = '$id'");
+    $delete  = mysqli_query($config, "DELETE FROM trans_order WHERE id = '$id'");
     header("location:trans-order.php?hapus=berhasil");
 }
 
@@ -32,11 +32,11 @@ if (isset($_GET['delete'])) {
         name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>Data Transaksi</title>
+    <title>Transaction Data</title>
 
     <meta name="description" content="" />
 
-    <?php include 'inc/head.php'; ?>
+    <?php include 'inc/header.php'; ?>
 
 </head>
 
@@ -50,38 +50,32 @@ if (isset($_GET['delete'])) {
 
             <!-- Layout container -->
             <div class="layout-page">
-                <!-- Navbar -->
-                <?php include 'inc/nav.php'; ?>
-                <!-- / Navbar -->
-
-                <!-- Content wrapper -->
                 <div class="content-wrapper">
-                    <!-- Content -->
 
                     <div class="container-xxl flex-grow-1 container-p-y">
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="card">
-                                    <div class="card-header">Transaksi Laundry</div>
+                                    <div class="card-header">Transaction</div>
                                     <div class="card-body">
                                         <?php if (isset($_GET['hapus'])): ?>
                                             <div class="alert alert-success" role="alert">
-                                                Data berhasil dihapus
+                                                Data has been deleted
                                             </div>
                                         <?php endif ?>
                                         <div align="right" class="mb-3">
-                                            <a href="tambah-trans.php" class="btn btn-primary">Tambah</a>
+                                            <a href="?page=tambah-trans" class="btn btn-primary">Add</a>
                                         </div>
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
                                                     <th>No Invoice</th>
-                                                    <th>Nama Pelanggan</th>
-                                                    <th>Tanggal Laundry</th>
+                                                    <th>Customer Name</th>
+                                                    <th>Laundry Date</th>
                                                     <th>Status</th>
 
-                                                    <th>Aksi</th>
+                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -127,43 +121,6 @@ if (isset($_GET['delete'])) {
                         </div>
                     </div>
 
-                    <!-- / Content -->
-
-                    <!-- Footer -->
-                    <?php include 'inc/footer.php' ?>
-                    <!-- / Footer -->
-
-                    <div class="content-backdrop fade"></div>
-
-                    <!-- Content wrapper -->
-                </div>
-                <!-- / Layout page -->
-            </div>
-
-            <!-- Overlay -->
-            <div class="layout-overlay layout-menu-toggle"></div>
-        </div>
-        <!-- / Layout wrapper -->
-
-        <!-- Core JS -->
-        <!-- build:js assets/vendor/js/core.js -->
-        <script src="assets/assets/vendor/libs/jquery/jquery.js"></script>
-        <script src="assets/assets/vendor/libs/popper/popper.js"></script>
-        <script src="assets/assets/vendor/js/bootstrap.js"></script>
-        <script src="assets/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-
-        <script src="assets/assets/vendor/js/menu.js"></script>
-        <!-- endbuild -->
-
-        <!-- Vendors JS -->
-
-        <!-- Main JS -->
-        <script src="assets/assets/js/main.js"></script>
-
-        <!-- Page JS -->
-
-        <!-- Place this tag in your head or just before your close body tag. -->
-        <script async defer src="https://buttons.github.io/buttons.js"></script>
 </body>
 
 </html>
