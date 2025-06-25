@@ -21,7 +21,7 @@ if (isset($_POST['edit'])) {
 
 
     $update = mysqli_query($config, "UPDATE customer SET customer_name='$name', phone='$phone', address='$address' WHERE id = '$id'");
-    header("location:customer.php?ubah=berhasil");
+    header("location:?page=customer&ubah=berhasil");
 }
 ?>
 

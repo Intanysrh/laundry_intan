@@ -2,14 +2,13 @@
 include 'config/koneksi.php';
 
 $queryCustomer = mysqli_query($config,  "SELECT * FROM customer ORDER BY id DESC");
-// pake mysqli_fetch_assoc($query) = untuk menjadikan hasil query menjadi sebuah data (object, array)
-// $dataUser = mysqli_fetch_assoc($queryUser);
-// jika parameternya ada ?delete=nilai parameter
+$rowCustomers = mysqli_fetch_all($queryCustomer, MYSQLI_ASSOC);
+
 if (isset($_GET['delete'])) {
     $id =  $_GET['delete']; // untuk mengambil nilai parameter
     //masukin $query untuk melakukan perintah yg diinginkan 
     $delete  = mysqli_query($config, "DELETE FROM customer WHERE id = '$id'");
-    header("location:customer.php?delete=berhasil");
+    header("location:?page=customer&hapus=berhasil");
 }
 ?>
 
@@ -67,15 +66,15 @@ if (isset($_GET['delete'])) {
                                         </thead>
                                         <tbody>
                                             <?php $no = 1;
-                                            while ($rowCustomer = mysqli_fetch_assoc($queryCustomer)) { ?>
+                                            foreach ($rowCustomers as $data) { ?>
                                                 <tr>
                                                     <td><?php echo $no++ ?></td>
-                                                    <td><?php echo $rowCustomer['customer_name'] ?></td>
-                                                    <td><?php echo $rowCustomer['phone'] ?></td>
-                                                    <td><?php echo $rowCustomer['address'] ?></td>
+                                                    <td><?php echo $data['customer_name'] ?></td>
+                                                    <td><?php echo $data['phone'] ?></td>
+                                                    <td><?php echo $data['address'] ?></td>
                                                     <td>
                                                         <a href="?page=tambah-customer&edit=<?php echo $data['id'] ?>" class="btn btn-success btn-sm">Edit</a>
-                                                        <a onclick="return confirm ('Are you sure?')" href="?page=tambah-customer&delete=<?php echo $data['id'] ?>" class="btn btn-warning btn-sm">Delete</a>
+                                                        <a onclick="return confirm ('Are you sure?')" href="?page=customer&delete=<?php echo $data['id'] ?>" class="btn btn-warning btn-sm">Delete</a>
                                                     </td>
                                                 </tr>
                                             <?php } ?>
