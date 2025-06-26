@@ -16,6 +16,7 @@
                     <iconify-icon icon="solar:menu-dots-linear" class="nav-small-cap-icon fs-4"></iconify-icon>
                     <span class="hide-menu">Home</span>
                 </li>
+
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="?page=user" aria-expanded="false">
                         <i class="ti ti-atom"></i>
@@ -47,12 +48,12 @@
                 <!-- ---------------------------------- -->
                 <li class="sidebar-item">
                     <a class="sidebar-link justify-content-between"
-                        href="#" aria-expanded="false">
+                        href="?page=report" aria-expanded="false">
                         <div class="d-flex align-items-center gap-3">
                             <span class="d-flex">
                                 <i class="ti ti-aperture"></i>
                             </span>
-                            <span class="hide-menu">Analytical</span>
+                            <span class="hide-menu">Report</span>
                         </div>
 
                     </a>
@@ -83,12 +84,12 @@
                         </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link justify-content-between"
-                                href="#">
+                                href="?page=trans-details">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="round-16 d-flex align-items-center justify-content-center">
                                         <i class="ti ti-circle"></i>
                                     </div>
-                                    <span class="hide-menu">Pick up</span>
+                                    <span class="hide-menu">Details</span>
                                 </div>
 
                             </a>

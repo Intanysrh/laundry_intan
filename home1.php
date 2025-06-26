@@ -37,16 +37,18 @@ include "config/koneksi.php";
             <div class="body-wrapper-inner">
                 <div class="container-fluid">
                     <section class="section">
-
-                        <?php
-                        if (isset($_GET['page'])) {
-                            if (file_exists("content/" . $_GET['page'] . ".php")) {
-                                include("content/" . $_GET['page'] . ".php");
-                            } else {
-                                include "content/notfound.php";
+                        <?php isset($_GET['page']) ? str_replace("-", " ", ucfirst($_GET['page'])) : 'Home' ?>
+                        <div class="card-body">
+                            <?php
+                            if (isset($_GET['page'])) {
+                                if (file_exists("content/" . $_GET['page'] . ".php")) {
+                                    include("content/" . $_GET['page'] . ".php");
+                                } else {
+                                    include "content/notfound.php";
+                                }
                             }
-                        }
-                        ?>
+                            ?>
+                        </div>
                     </section>
 
                 </div>

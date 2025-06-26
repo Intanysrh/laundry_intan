@@ -1,5 +1,4 @@
 <?php
-session_start();
 include 'config/koneksi.php';
 
 // Fetch all services from the database

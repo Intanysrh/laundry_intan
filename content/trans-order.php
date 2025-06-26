@@ -1,5 +1,4 @@
 <?php
-session_start();
 include 'config/koneksi.php';
 // munculkan atau pilih  sebuah atau semua kolom dari table user
 $queryTrans = mysqli_query($config,  "SELECT customer.customer_name, trans_order.* FROM trans_order LEFT JOIN customer ON customer.id=trans_order.id_customer ORDER BY id DESC");
@@ -10,7 +9,7 @@ if (isset($_GET['delete'])) {
     $id =  $_GET['delete']; // untuk mengambil nilai parameter
     //masukin $query untuk melakukan perintah yg diinginkan
     $delete  = mysqli_query($config, "DELETE FROM trans_order WHERE id = '$id'");
-    header("location:trans-order.php?hapus=berhasil");
+    header("location:?page=trans-order&hapus=berhasil");
 }
 
 ?>
@@ -73,6 +72,7 @@ if (isset($_GET['delete'])) {
                                                     <th>No Invoice</th>
                                                     <th>Customer Name</th>
                                                     <th>Laundry Date</th>
+                                                    <th>Amount</th>
                                                     <th>Status</th>
 
                                                     <th>Action</th>
@@ -86,6 +86,7 @@ if (isset($_GET['delete'])) {
                                                         <td><?php echo $rowTrans['order_code'] ?></td>
                                                         <td><?php echo $rowTrans['customer_name'] ?></td>
                                                         <td><?php echo $rowTrans['order_date'] ?></td>
+                                                        <td><?php echo $rowTrans['total'] ?></td>
                                                         <td>
                                                             <?php
                                                             switch ($rowTrans['order_status']) {
@@ -100,15 +101,15 @@ if (isset($_GET['delete'])) {
                                                             ?>
                                                         </td>
                                                         <td>
-                                                            <a href="tambah-trans.php?detail=<?php echo $rowTrans['id'] ?>" class="btn btn-primary btn-sm">
-                                                                <span class="tf-icon bx bx-show bx-18px"></span>
+                                                            <a href="?page=tambah-trans&detail=<?php echo $rowTrans['id'] ?>" class="btn btn-primary btn-sm">
+                                                                <span class="tf-icon bx bx-show bx-18px"></span> Order
                                                             </a>
-                                                            <a target="_blank" href="print.php?id=<?php echo $rowTrans['id'] ?>" class="btn btn-success btn-sm">
-                                                                <span class="tf-icon bx bx-printer bx-18px"></span>
+                                                            <a target="_blank" href="?page=print&id=<?php echo $rowTrans['id'] ?>" class="btn btn-success btn-sm">
+                                                                <span class="tf-icon bx bx-printer bx-18px"></span> Print
                                                             </a>
-                                                            <a onclick="return confirm('Apakah anda yakin akan menghapus data ini?')"
-                                                                href="trans-order.php?delete=<?php echo $rowTrans['id'] ?>" class="btn btn-danger btn-sm">
-                                                                <span class="tf-icon bx bx-trash bx-18px"></span></a>
+                                                            <a onclick="return confirm('Are you sure to delete this data?')"
+                                                                href="?page=trans-order&delete=<?php echo $rowTrans['id'] ?>" class="btn btn-danger btn-sm">
+                                                                <span class="tf-icon bx bx-trash bx-18px"></span>Delete</a>
                                                         </td>
                                                     </tr>
                                                 <?php } ?>
@@ -120,6 +121,45 @@ if (isset($_GET['delete'])) {
                             </div>
                         </div>
                     </div>
+                    <script>
+                        const button = document.querySelector('#addRow');
+                        const tbody = document.querySelector('#myTable tbody');
+                        let count = 0;
+
+                        button.addEventListener("click", function() {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+        <td>
+            <select name="id_service[]" class="form-control" required>
+                <option value="">Choose Service</option>
+                <?php foreach ($rowsS as $key => $data) { ?>
+                    <option value="<?php echo $data['id']; ?>"><?php echo $data['service_name']; ?></option>
+                <?php } ?>
+            </select>
+        </td>
+        <td><input type="number" step="any" class="form-control" name="qty[]" placeholder="Enter your quantity" required></td>
+        <td><textarea class="form-control" name="notes[]"></textarea></td>
+        
+        <td><button type="button" class="btn btn-danger delRow">Delete</button></td>
+        `;
+                            tbody.appendChild(tr);
+
+                        });
+
+                        // Delegasi event ke tbody
+                        tbody.addEventListener('click', function(e) {
+                            if (e.target && e.target.classList.contains('delRow')) {
+                                const tr = e.target.closest('tr');
+                                if (tr) {
+                                    tr.remove(); // Hapus baris
+                                }
+                            }
+                        });
+
+                        function name(params) {
+
+                        }
+                    </script>
 
 </body>
 
