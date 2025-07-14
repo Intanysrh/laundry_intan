@@ -2,6 +2,7 @@
 session_start();
 ob_start();
 include "config/koneksi.php";
+print_r($_SESSION);
 ?>
 
 <!doctype html>
@@ -16,8 +17,7 @@ include "config/koneksi.php";
 </head>
 
 <body>
-    <?php include 'inc/header.php'
-    ?>
+    <?php include 'inc/header.php' ?>
 
     <?php include 'inc/sidebar.php' ?>
 

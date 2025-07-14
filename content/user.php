@@ -11,6 +11,7 @@ $row = mysqli_fetch_all($query, MYSQLI_ASSOC);
                 <h5 class="card-title">Data User</h5>
                 <div class="mb-3" align="right">
                     <a href="?page=tambah-user" class="btn btn-primary">Add User</a>
+                    <a href="?page=user-setting" class="btn btn-primary">Setting</a>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-bordered">

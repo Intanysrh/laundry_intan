@@ -5,20 +5,50 @@ $customers = mysqli_query($config, "SELECT * FROM customer WHERE deleted_at IS N
 $queryService = mysqli_query($config, "SELECT * FROM type_of_service WHERE deleted_at IS NULL");
 $rowService = mysqli_fetch_all($queryService, MYSQLI_ASSOC);
 
-$id_user = $_GET['detail'];
-$selectDetail = mysqli_query($config, "SELECT * FROM trans_order WHERE id = $id_user");
-$rowDetail = mysqli_fetch_assoc($selectDetail);
-if (isset($_GET['detail'])) {
-    // print_r($id_user); die;
-    $id_order = $rowDetail['id'];
-    $selectService = mysqli_query($config, "SELECT trans_order_detail.*, type_of_service.service_name FROM trans_order_detail 
-    LEFT JOIN type_of_service ON type_of_service.id = trans_order_detail.id_service 
-    WHERE id_order = $id_order");
-    $rowSelectService = mysqli_fetch_all($selectService, MYSQLI_ASSOC);
+$rowDetail = null; // Inisialisasi $rowDetail di awal
+$rowSelectService = []; // Inisialisasi $rowSelectService di awal
+
+if (isset($_GET['details'])) {
+    $id_user = $_GET['details'];
+
+    // Validasi $id_user untuk memastikan itu adalah integer
+    if (filter_var($id_user, FILTER_VALIDATE_INT)) {
+        // Menggunakan prepared statement untuk SELECT * FROM trans_order
+        $stmt_detail = mysqli_prepare($config, "SELECT * FROM trans_order WHERE id = ?");
+        mysqli_stmt_bind_param($stmt_detail, "i", $id_user);
+        mysqli_stmt_execute($stmt_detail);
+        $result_detail = mysqli_stmt_get_result($stmt_detail);
+
+        if ($result_detail && mysqli_num_rows($result_detail) > 0) {
+            $rowDetail = mysqli_fetch_assoc($result_detail);
+            $id_order = $rowDetail['id'];
+
+            // Menggunakan prepared statement untuk SELECT trans_order_detail
+            $stmt_service = mysqli_prepare($config, "SELECT trans_order_detail.*, type_of_service.service_name FROM trans_order_detail
+            LEFT JOIN type_of_service ON type_of_service.id = trans_order_detail.id_service
+            WHERE id_order = ?");
+            mysqli_stmt_bind_param($stmt_service, "i", $id_order);
+            mysqli_stmt_execute($stmt_service);
+            $result_service = mysqli_stmt_get_result($stmt_service);
+
+            if ($result_service) {
+                $rowSelectService = mysqli_fetch_all($result_service, MYSQLI_ASSOC);
+            } else {
+                echo "Error mengambil detail layanan: " . mysqli_error($config);
+            }
+            mysqli_stmt_close($stmt_service);
+        } else {
+            echo "Detail transaksi tidak ditemukan untuk ID: " . htmlspecialchars($id_user);
+        }
+        mysqli_stmt_close($stmt_detail);
+    } else {
+        echo "ID detail tidak valid.";
+    }
 }
 
 if (isset($_POST['back'])) {
-    header('location:?page=trans-order');
+    header('location:?page=transaction');
+    exit; // Penting untuk menambahkan exit setelah header redirect
 }
 ?>
 
@@ -66,8 +96,8 @@ if (isset($_POST['back'])) {
                     <label class="col-sm-2 col-form-label">Order Status</label>
                     <div class="col-sm-10">
                         <select name="order_status" class="form-control" required <?php if (isset($_GET['detail'])) echo 'disabled'; ?>>
-                            <option value="0" <?= (isset($rowDetail) && ((int)$rowDetail['order_status'] === 0)) ? 'selected' : '' ?>>Ongoing</option>
-                            <option value="1" <?= (isset($rowDetail) && ((int)$rowDetail['order_status'] === 1)) ? 'selected' : '' ?>>Finish</option>
+                            <option value="0" <?= (isset($rowDetail) && ((int)$rowDetail['order_status'] === 0)) ? 'selected' : '' ?>>Berlangsung</option>
+                            <option value="1" <?= (isset($rowDetail) && ((int)$rowDetail['order_status'] === 1)) ? 'selected' : '' ?>>Selesai</option>
                         </select>
 
                     </div>
